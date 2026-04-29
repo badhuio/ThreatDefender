@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" th:href="@{/css/adminPannel/admin.css}">
+</head>
+<body>
+
+<h1>Admin Panel</h1>
+
+<!-- INPUT PANEL -->
+<div class="payloadInputs">
+    <h3 class="payloadInputHeading">Store New Payload</h3>
+
+    <!-- File Drop Zone (FILE / IMAGE / VIDEO) -->
+    <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" class="fileInput"/>
+        <span class="drop-icon">&#8679;</span>
+        <p class="drop-label">Drag &amp; drop or <span>browse file</span></p>
+        <p class="file-name" id="fileName"></p>
+    </div>
+
+    <!-- URL Input (shown only in URL mode) -->
+    <input type="url" class="url-input" id="urlInput" placeholder="https://example.com/payload" />
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <button class="payloadSubmit" id="submitBtn">SUBMIT</button>
+</div>
+
+<!-- MODE TABS -->
+<div class="inputSelection">
+    <button class="tab active" onclick="dataMode('FILE', this)">FILE</button>
+    <button class="tab" onclick="dataMode('IMAGE', this)">IMAGE</button>
+    <button class="tab" onclick="dataMode('VIDEO', this)">VIDEO</button>
+    <button class="tab" onclick="dataMode('URL', this)">URL</button>
+</div>
+
+<!-- DATA TABLE -->
+<div class="payloadDataTable">
+    <table>
+        <thead>
+        <tr>
+            <th>Date/Time</th>
+            <th>Payload</th>
+            <th>UserID</th>
+            <th>Priority</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>10/10/2026</td>
+            <td title="www.youtube.com/sqli">www.youtube.com/sqli</td>
+            <td>192.168.1.33</td>
+            <td><span class="badge badge-low">LOW</span></td>
+            <td><span class="badge badge-blocked">BLOCKED</span></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script th:src="@{/js_designs/adminPannel/adminPannel.js}"></script>
+</body>
+</html>
