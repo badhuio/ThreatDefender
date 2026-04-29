@@ -252,3 +252,18 @@ h1 {
 .badge-high    { background: rgba(220,53,69,.15);  color: #f85149; border: 1px solid rgba(220,53,69,.3); }
 .badge-blocked { background: rgba(255,165,0,.12);  color: #e3a027; border: 1px solid rgba(255,165,0,.3); }
 .badge-allowed { background: rgba(40,167,69,.15);  color: #2dbd4e; border: 1px solid rgba(40,167,69,.3); }
+
+
+/*popupMessage*/
+#popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #1a2332;
+    border: 1px solid #28a745;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    color: #fff;
+}
