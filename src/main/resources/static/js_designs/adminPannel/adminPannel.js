@@ -1,5 +1,3 @@
-var currentMode = 'FILE';
-
 function dataMode(type, btn){
 
    currentMode = type;
@@ -40,7 +38,7 @@ function dataMode(type, btn){
 }
 
 
-//popupMessage
+//popupMessages
 
 function successPopup(popupMessage){
     document.getElementById('popupMessage').textContent = 'Payload saved';
@@ -50,16 +48,28 @@ function errorPopup(popupMessage){
     document.getElementById('popupMessage').textContent = 'Invalid format!';
     document.getElementById('popup').style.display = 'block';
 }
+
+function elsePopup(){
+       document.getElementById('popupMessage').textContent = 'Payload transferring failed';
+       document.getElementById('popup').style.display = 'block';
+}
+
 function closePopup(){
     document.getElementById('popup').style.display = 'none';
 }
 
+
 //crossCheck
 
  function fileMatching(fileInput){
-    if(!fileInput.match(/\.(pdf)$/i)){
+     return /\.(pdf|doc|docx|txt|jpg|jpeg|png|gif|webp|svg|mp4|webm|ogg|mov|avi|mkv|3gp)$/i.test(fileInput.name);
+ }
+
+ function urlMatching(urlInput){
+    try{
+        const url = new URL(urlInput.trim());
+        return url.protocol === 'http:' || url.protocol === 'https:';
+    }catch(e){
         return false;
-    }else{
-        return true;
     }
  }
