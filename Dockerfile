@@ -2,7 +2,7 @@ FROM eclipse-temurin:17
 
 WORKDIR /app
 
-COPY src/main/java/com/badhu/ThreatDefender .
+COPY . .
 
 RUN chmod +x gradlew
 
