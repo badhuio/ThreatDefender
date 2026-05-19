@@ -57,9 +57,9 @@ function closePopup(){
  function fileMatching(fileInputName){
       return /\.(pdf|txt|ppt|pptx|zip|rar)$/i.test(fileInputName);
  }
- /*function fileSaveMatching(fileInputName){
+ function fileSaveMatching(fileInputName){
       return /\.(doc|docx)$/i.test(fileInputName);
- }*/
+ }
 
 
 

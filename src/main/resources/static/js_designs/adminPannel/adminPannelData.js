@@ -17,6 +17,8 @@ document.getElementById('submitBtn').onclick = async function(){
 
                var fileMatchingResult = fileMatching(fileInput.name);
 
+               console.log("fileMatchingResult : " fileMatchingResult);
+
                 if(fileMatchingResult == false){
                     try{
                         let fileSaved = await fileSaveMatching(fileInput.name);
@@ -57,9 +59,9 @@ document.getElementById('submitBtn').onclick = async function(){
                            let popupMessage = "PAYLOAD FOUNDED";
                            responsePopup(popupMessage);
                        }else{
-                           fileInputClear.value = "";
-                                let popupMessage = "PAYLOAD NOT FOUNDED";
-                                responsePopup(popupMessage);
+                             let popupMessage = "PAYLOAD NOT FOUNDED";
+                             responsePopup(popupMessage);
+                             fileInputClear.value = "";
                        }
 
                        }else{
