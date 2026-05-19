@@ -17,7 +17,7 @@ document.getElementById('submitBtn').onclick = async function(){
 
                var fileMatchingResult = fileMatching(fileInput.name);
 
-               console.log("fileMatchingResult : " fileMatchingResult);
+               console.log("fileMatchingResult : " + fileMatchingResult);
 
                 if(fileMatchingResult == false){
                     try{
