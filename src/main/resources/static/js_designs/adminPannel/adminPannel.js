@@ -80,9 +80,9 @@ function closePopup(){
  function fileMatching(fileInput){
      return /\.(pdf|txt|jpg|jpeg|png|gif|webp|svg|mp4|webm|ogg|mov|avi|mkv|3gp)$/i.test(fileInput.name);
  }
- function fileSaveMatching(fileInput){
-      return /\.(doc|docx)$/i.test(fileInput.name);
-  }
+// function fileSaveMatching(fileInput){
+//      return /\.(doc|docx)$/i.test(fileInput.name);
+//  }
 
 
 
