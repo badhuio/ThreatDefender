@@ -53,10 +53,9 @@ document.getElementById('submitBtn').onclick = async function(){
                         const result = await fileResponse.text();
                         console.log(result);
 
-                       if(result === "true"){
-                           fileInputClear.value = "";
-                                let popupMessage = "PAYLOAD FOUNDED";
-                                responsePopup(popupMessage);
+                       if(result.trim() === "true"){
+                           let popupMessage = "PAYLOAD FOUNDED";
+                           responsePopup(popupMessage);
                        }else{
                            fileInputClear.value = "";
                                 let popupMessage = "PAYLOAD NOT FOUNDED";

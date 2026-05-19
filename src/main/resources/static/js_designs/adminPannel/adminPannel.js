@@ -55,7 +55,7 @@ function closePopup(){
 //crossCheck
 
  function fileMatching(fileInputName){
-      return /\.(pdf|txt||ppt|pptx|zip|rar)$/i.test(fileInputName);
+      return /\.(pdf|txt|ppt|pptx|zip|rar)$/i.test(fileInputName);
  }
  /*function fileSaveMatching(fileInputName){
       return /\.(doc|docx)$/i.test(fileInputName);
