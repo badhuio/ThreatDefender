@@ -40,35 +40,12 @@ function dataMode(type, btn){
 
 //popupMessages
 
-function successPopup(popupMessage){
-    document.getElementById('popupMessage').textContent = 'Payload saved';
+function responsePopup(popupMessage){
+    document.getElementById('popupMessage').textContent = popupMessage;
     document.getElementById('popup').style.display = 'block';
 }
 
-function payloadFound(popupMessage){
-    document.getElementById('popupMessage').textContent = 'PAYLOAD FOUNDED'
-    document.getElementById('popup').style.display = 'block';
-}
-
-function payloadEmpty(popupMessage){
-    document.getElementById('popupMessage').textContent = 'PAYLOAD NOT FOUNDED'
-    document.getElementById('popup').style.display = 'block';
-}
-
-function matchPopup(popupMessage, result){
-    document.getElementById('popupMessage').textContent = 'Payload format matched';
-    document.getElementById('popup').style.display = 'block';
-}
-
-function errorPopup(popupMessage){
-    document.getElementById('popupMessage').textContent = 'Invalid format!';
-    document.getElementById('popup').style.display = 'block';
-}
-
-function elsePopup(){
-       document.getElementById('popupMessage').textContent = 'Payload transferring failed';
-       document.getElementById('popup').style.display = 'block';
-}
+//close after click "ok"
 
 function closePopup(){
     document.getElementById('popup').style.display = 'none';
@@ -77,13 +54,12 @@ function closePopup(){
 
 //crossCheck
 
-function fileMatching(fileInputName){
-     return /\.(pdf|txt|jpg|jpeg|png|gif|webp|svg|mp4|webm|ogg|mov|avi|mkv|3gp)$/i.test(fileInputName);
-}
-
-/*function fileSaveMatching(fileInputName){
+ function fileMatching(fileInputName){
+      return /\.(pdf|txt||ppt|pptx|zip|rar)$/i.test(fileInputName);
+ }
+ /*function fileSaveMatching(fileInputName){
       return /\.(doc|docx)$/i.test(fileInputName);
-}*/
+ }*/
 
 
 

@@ -9,10 +9,11 @@ document.getElementById('submitBtn').onclick = async function(){
 
            if(currentMode === 'FILE' ){
 
-               if(!fileInput){
-                  errorPopup();
-                  return;
-               }
+            if(!fileInput ){
+                let popupMessage = "ADD FILE TO CHECK";
+                responsePopup(popupMessage);
+                return;
+            }
 
                var fileMatchingResult = fileMatching(fileInput.name);
 
@@ -24,7 +25,8 @@ document.getElementById('submitBtn').onclick = async function(){
 
                         if(fileSaved == false){
                             fileInputClear.value = "";
-                            errorPopup();
+                                let popupMessage = "FILE FORMAT INVALID";
+                                responsePopup(popupMessage);
 
                         }else{
                             await fileSaving(fileInput,fileInputClear);
@@ -53,20 +55,21 @@ document.getElementById('submitBtn').onclick = async function(){
 
                        if(result === "true"){
                            fileInputClear.value = "";
-                           payloadFound();
+                                let popupMessage = "PAYLOAD FOUNDED";
+                                responsePopup(popupMessage);
                        }else{
                            fileInputClear.value = "";
-                           payloadEmpty();
+                                let popupMessage = "PAYLOAD NOT FOUNDED";
+                                responsePopup(popupMessage);
                        }
 
-
                        }else{
-                           elsePopup();
                            fileInputClear.value = "";
+                                let popupMessage = "PAYLOAD CHECKING FAILED";
+                                responsePopup(popupMessage);
                        }
                    }catch(e){
                         console.error("Data Passing program failed",e);
-
                    }}
 
            }else if(currentMode === 'IMAGE'){
@@ -177,11 +180,13 @@ document.getElementById('submitBtn').onclick = async function(){
                             });
 
                             if(fileResponse.ok){
-                                successPopup();
                                 fileInputClear.value = "";
+                                    let popupMessage = "PAYLOAD SAVED SUCCESSFULLY";
+                                    responsePopup(popupMessage);
                             }else{
-                                elsePopup();
                                 fileInputClear.value = "";
+                                     let popupMessage = "PAYLOAD FAILED TO SAVE";
+                                     responsePopup(popupMessage);
                             }
                         }catch(e){
                             console.log("Data Passing Program Failed",e);
