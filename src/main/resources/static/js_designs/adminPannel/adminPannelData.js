@@ -1,4 +1,4 @@
-let currentMode = "FILE";
+let currentMode = 'FILE';
 
 document.getElementById('submitBtn').onclick = async function(){
            var fileInput = document.getElementById('fileInput').files[0];
@@ -8,11 +8,17 @@ document.getElementById('submitBtn').onclick = async function(){
                 var urlInputClear = document.getElementById('urlInput');
 
            if(currentMode === 'FILE' ){
+
+               if(!fileInput){
+                  errorPopup();
+                  return;
+               }
+
                var fileMatchingResult = fileMatching(fileInput.name);
 
                 if(fileMatchingResult == false){
                     try{
-                        let fileSaved = await fileSaveMatching(fileInput);
+                        let fileSaved = await fileSaveMatching(fileInput.name);
 
                         console.log("fileSaved:",fileSaved);
 
@@ -27,7 +33,6 @@ document.getElementById('submitBtn').onclick = async function(){
                     }catch (e){
                     console.log("fileSaving failed",e)
                     }
-
                 }
 
                    if(fileMatchingResult == true){
