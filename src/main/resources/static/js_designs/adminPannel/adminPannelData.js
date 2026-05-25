@@ -7,6 +7,7 @@ document.getElementById('submitBtn').onclick = async function(){
                 var fileInputClear = document.getElementById("fileInput");
                 var urlInputClear = document.getElementById('urlInput');
 
+
            if(currentMode === 'FILE' ){
 
             if(!fileInput ){
@@ -16,8 +17,6 @@ document.getElementById('submitBtn').onclick = async function(){
             }
 
                var fileMatchingResult = fileMatching(fileInput.name);
-
-               console.log("fileMatchingResult : " + fileMatchingResult);
 
                 if(fileMatchingResult == false){
                     try{
@@ -55,13 +54,14 @@ document.getElementById('submitBtn').onclick = async function(){
                         const result = await fileResponse.text();
                         console.log(result);
 
-                       if(result.trim() === "true"){
-                           let popupMessage = "PAYLOAD FOUNDED";
-                           responsePopup(popupMessage);
+                       if(result === "true"){
+                           fileInputClear.value = "";
+                                let popupMessage = "PAYLOAD FOUNDED";
+                                responsePopup(popupMessage);
                        }else{
-                             let popupMessage = "PAYLOAD NOT FOUNDED";
-                             responsePopup(popupMessage);
-                             fileInputClear.value = "";
+                           fileInputClear.value = "";
+                                let popupMessage = "PAYLOAD NOT FOUNDED";
+                                responsePopup(popupMessage);
                        }
 
                        }else{
@@ -135,41 +135,51 @@ document.getElementById('submitBtn').onclick = async function(){
                 }
 
            }else if(currentMode === 'URL'){
-                var urlMatchingResult = urlMatching(urlInput);
 
-                if(!urlMatchingResult == true){
-//                    errorPopup();
-                    urlInputClear.value = "";
-                }
+                            var urlMatchingResult = urlMatching(urlInput);
 
-                if(urlMatchingResult == true){
-                    try{
-                        const urlData = new FormData();
-                        urlData.append("url", urlInput);
+                            if(!urlMatchingResult){
 
-                        const urlResponse = await fetch("/urlDataMatching" , {
-                            method : 'POST',
-                            body : urlData
-                        });
+                                popupMessage = "URL FORMAT INVALID";
+                                responsePopup(popupMessage);
+                                urlInputClear.value = "";
 
-                        if(urlResponse.ok){
-                            matchPopup();
-                            urlInputClear.value = "";
-                        }else{
-                            elsePopup();
-                            urlInputClear.value = "";
-                        }
-                    }catch(e){
-                        console.log("Data Passing program failed",e);
-                    }
-                    }
-           }
+                            }else{
+
+                              try {
+
+                                  const urlData = new FormData();
+                                  urlData.append("url", urlInput);
+
+                                  const urlResponse = await fetch("/urlDataMatching", {
+                                      method: 'POST',
+                                      body: urlData
+                                  });
+
+                                  if(urlResponse.ok){
+
+                                      const result = await urlResponse.text();
+
+                                      if(result == "true"){
+                                           urlInputClear.value = "";
+                                           popupMessage = "PAYLOAD FOUND";
+                                      }else{
+                                           urlInputClear.value = "";
+                                           popupMessage = "PAYLOAD NOT FOUND";
+                                      }
+
+                                  }else{
+                                      popupMessage = "API CRASHED";
+                                  }
+                                  responsePopup(popupMessage);
+
+                              }catch(e){
+                                  console.log("Data Passing program failed", e);
+                              }
+                       }}}
 
 
-}
-
-
-    async function fileSaving(fileInput,fileInputClear){
+        async function fileSaving(fileInput,fileInputClear){
                 try{
                     const fileData = new FormData();
                     fileData.append("file",fileInput);

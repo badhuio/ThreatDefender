@@ -12,4 +12,6 @@ public class Payload {
     private String id;
 
     private String payload;
+
+    private String priority;
 }

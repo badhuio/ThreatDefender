@@ -14,7 +14,7 @@
 
     <!-- File Drop Zone (FILE / IMAGE / VIDEO) -->
     <div class="drop-zone" id="dropZone">
-        <input type="file" id="fileInput" class="fileInput"/>
+        <input type="file" id="fileInput" class="fileInput" accept=".pdf,.txt,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.rar" />
         <span class="drop-icon">&#8679;</span>
         <p class="drop-label">Drag &amp; drop or <span>browse file</span></p>
         <p class="file-name" id="fileName"></p>
@@ -69,6 +69,8 @@
     <p id="popupMessage"></p>
     <button onclick="closePopup()">OK</button>
 </div>
+
+<!---->
 
 <script th:src="@{/js_designs/adminPannel/adminPannel.js}"></script>
 <script th:src="@{/js_designs/adminPannel/adminPannelData.js}"></script>

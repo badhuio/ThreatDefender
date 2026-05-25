@@ -11,3 +11,4 @@ public class pageController {
         return "adminPannel/admin";
     }
 }
+
