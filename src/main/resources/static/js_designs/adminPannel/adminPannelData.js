@@ -162,14 +162,14 @@ document.getElementById('submitBtn').onclick = async function(){
 
                                       if(result == "true"){
                                            urlInputClear.value = "";
-                                           popupMessage = "PAYLOAD FOUND";
+                                           let popupMessage = "PAYLOAD FOUND";
                                       }else{
                                            urlInputClear.value = "";
-                                           popupMessage = "PAYLOAD NOT FOUND";
+                                           let popupMessage = "PAYLOAD NOT FOUND";
                                       }
 
                                   }else{
-                                      popupMessage = "API CRASHED";
+                                      let popupMessage = "API CRASHED";
                                   }
                                   responsePopup(popupMessage);
 
