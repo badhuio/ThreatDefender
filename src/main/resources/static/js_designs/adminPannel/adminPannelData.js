@@ -7,6 +7,8 @@ document.getElementById('submitBtn').onclick = async function(){
                 var fileInputClear = document.getElementById("fileInput");
                 var urlInputClear = document.getElementById('urlInput');
 
+                let popupMessage;
+
 
            if(currentMode === 'FILE' ){
 
@@ -160,7 +162,7 @@ document.getElementById('submitBtn').onclick = async function(){
 
                                       const result = await urlResponse.text();
 
-                                      if(result == "true"){
+                                      if(result === "true"){
                                            urlInputClear.value = "";
                                            let popupMessage = "PAYLOAD FOUND";
                                       }else{
