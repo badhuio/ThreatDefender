@@ -162,7 +162,7 @@ document.getElementById('submitBtn').onclick = async function(){
 
                                       const result = await urlResponse.text();
 
-                                      console.log(result " : result of urlResponse");
+                                      console.log(result, " : result of urlResponse");
 
                                       if(result === "true"){
                                            urlInputClear.value = "";
