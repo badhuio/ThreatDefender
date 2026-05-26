@@ -93,10 +93,10 @@ document.getElementById('submitBtn').onclick = async function(){
                         });
 
                             if(imageResponse.ok){
-                                matchPopup();
+//                                matchPopup();
                                 fileInputClear.value = "";
                             }else{
-                                elsePopup();
+//                                elsePopup();
                                 fileInputClear.value = "";
                             }
                     }catch (e){
@@ -123,10 +123,10 @@ document.getElementById('submitBtn').onclick = async function(){
                         });
 
                         if(videoResponse.ok){
-                            matchPopup();
+//                            matchPopup();
                             fileInputClear.value = "";
                         }else{
-                            elsePopup();
+//                            elsePopup();
                             fileInputClear.value = "";
                         }
                     }catch(e){
