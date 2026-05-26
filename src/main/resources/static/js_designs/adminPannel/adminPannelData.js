@@ -7,8 +7,6 @@ document.getElementById('submitBtn').onclick = async function(){
                 var fileInputClear = document.getElementById("fileInput");
                 var urlInputClear = document.getElementById('urlInput');
 
-                let popupMessage;
-
 
            if(currentMode === 'FILE' ){
 
@@ -138,13 +136,15 @@ document.getElementById('submitBtn').onclick = async function(){
 
            }else if(currentMode === 'URL'){
 
-                            var urlMatchingResult = urlMatching(urlInput);
+                            let urlMatchingResult = urlMatching(urlInput);
 
-                            if(!urlMatchingResult){
+                            console.log(urlMatchingResult);
 
-                                popupMessage = "URL FORMAT INVALID";
-                                responsePopup(popupMessage);
+                            if(urlMatchingResult === false){
                                 urlInputClear.value = "";
+                                let popupMessage = "URL FORMAT INVALID";
+                                responsePopup(popupMessage);
+
 
                             }else{
 
@@ -162,23 +162,30 @@ document.getElementById('submitBtn').onclick = async function(){
 
                                       const result = await urlResponse.text();
 
+                                      console.log(result " : result of urlResponse");
+
                                       if(result === "true"){
                                            urlInputClear.value = "";
                                            let popupMessage = "PAYLOAD FOUND";
+                                           responsePopup(popupMessage);
                                       }else{
                                            urlInputClear.value = "";
                                            let popupMessage = "PAYLOAD NOT FOUND";
+                                           responsePopup(popupMessage);
                                       }
 
                                   }else{
                                       let popupMessage = "API CRASHED";
+                                      responsePopup(popupMessage);
                                   }
-                                  responsePopup(popupMessage);
+
 
                               }catch(e){
                                   console.log("Data Passing program failed", e);
                               }
-                       }}}
+                            }
+           }
+}
 
 
         async function fileSaving(fileInput,fileInputClear){
