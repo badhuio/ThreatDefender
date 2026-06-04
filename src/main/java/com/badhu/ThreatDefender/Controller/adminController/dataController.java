@@ -1,6 +1,7 @@
 package com.badhu.ThreatDefender.Controller.adminController;
 
 import com.badhu.ThreatDefender.Service.adminService.dataService;
+import com.badhu.ThreatDefender.Service.adminService.geminiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ public class dataController {
 
     @Autowired
     dataService dataService;
+    geminiService geminiService;
 
     @GetMapping("/ping")
     public String ping() {
@@ -71,5 +73,10 @@ public class dataController {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @PostMapping("/urlAi")
+    public String urlAi(@RequestParam("url") String urlAi){
+        return geminiService.urlAi(urlAi);
     }
 }

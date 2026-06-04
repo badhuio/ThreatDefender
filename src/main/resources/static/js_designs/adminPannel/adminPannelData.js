@@ -166,8 +166,24 @@ document.getElementById('submitBtn').onclick = async function(){
 
                                       if(result === "true"){
                                            urlInputClear.value = "";
-                                           let popupMessage = "PAYLOAD FOUND";
-                                           responsePopup(popupMessage);
+                                           //let popupMessage = "PAYLOAD FOUND";
+                                           //responsePopup(popupMessage);
+
+                                           const urlAi = urlData;
+                                           const urlAiResult = await fetch("/urlAi", {
+                                                method : "POST",
+                                                body : urlAi
+                                           });
+
+                                           console.log("urlAiResult",urlAiResult);
+
+                                                if(!urlAiResult == null){
+                                                    popupMessage = await urlAiResult.json();
+                                                    responsePopup(popupMessage);
+                                                }else{
+                                                    popupMessage = "gemini communication failed";
+                                                    responsePopup(popupMessage);
+                                                }
                                       }else{
                                            urlInputClear.value = "";
                                            let popupMessage = "PAYLOAD NOT FOUND";
