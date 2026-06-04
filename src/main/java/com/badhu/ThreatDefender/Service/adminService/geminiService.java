@@ -53,7 +53,7 @@ public class geminiService {
 
             HttpEntity<String> request = new HttpEntity<>(json, headers);
 
-            return restTemplate.postForObject(urlAi, request, String.class);
+            return restTemplate.postForObject(url, request, String.class);
 
         } catch (Exception e) {
             return "Error: " + e.getMessage();

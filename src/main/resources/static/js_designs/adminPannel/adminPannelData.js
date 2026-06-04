@@ -178,7 +178,7 @@ document.getElementById('submitBtn').onclick = async function(){
                                            console.log("urlAiResult",urlAiResult);
 
                                                 if(!urlAiResult == null){
-                                                    popupMessage = await urlAiResult.json();
+                                                    popupMessage = await urlAiResult.text();
                                                     responsePopup(popupMessage);
                                                 }else{
                                                     popupMessage = "gemini communication failed";
