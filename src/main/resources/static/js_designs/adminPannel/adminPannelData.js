@@ -171,7 +171,7 @@ document.getElementById('submitBtn').onclick = async function(){
 
                                            const urlAi = urlData;
                                            const urlAiResult = await fetch("/ask", {
-                                                method : "GET",
+                                                method : "POST",
                                                 body : urlAi
                                            });
 
