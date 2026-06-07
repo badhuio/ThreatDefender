@@ -15,8 +15,10 @@ import java.net.MalformedURLException;
 public class dataController {
 
     @Autowired
-    dataService dataService;
-    geminiService geminiService;
+    private dataService dataService;
+
+    @Autowired
+    private geminiService geminiService;
 
     @GetMapping("/ping")
     public String ping() {
