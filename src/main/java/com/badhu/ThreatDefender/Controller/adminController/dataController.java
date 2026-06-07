@@ -88,15 +88,15 @@ public class dataController {
 
     @PostMapping("/ask")
     public String ask(Payload payload) {
-        String prompt = """
-            Analyze this payload and return ONLY:
-            
-                Risk: LOW/MEDIUM/HIGH
-                Priority: LOW/MEDIUM/HIGH
-                Type: Attack type
-                Mitigation: One short sentence
-                    Payload:
-            """ + payload;
-        return geminiService.askGemini(prompt);
+            String prompt = """
+                Analyze this payload and return ONLY:
+                
+                    Risk: LOW/MEDIUM/HIGH
+                    Priority: LOW/MEDIUM/HIGH
+                    Type: Attack type
+                    Mitigation: One short sentence
+                        Payload:
+                """ + payload;
+            return geminiService.askGemini(prompt);
     }
 }

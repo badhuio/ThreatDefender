@@ -16,10 +16,45 @@ public class geminiService {
                 .apiKey(apiKey)
                 .build();
 
-        return client.models.generateContent(
+        String[] models = {
                 "gemini-2.5-flash",
-                prompt,
-                null
-        ).text();
+                "gemini-2.5-flash-lite",
+                "gemini-2.0-flash",
+                "gemini-2.0-flash-lite"
+        };
+
+        for (String model : models) {
+
+            try {
+
+                System.out.println("Trying model: " + model);
+
+                String response = client.models.generateContent(
+                        model,
+                        prompt,
+                        null
+                ).text();
+
+                if (response != null && !response.isBlank()) {
+                    return response;
+                }
+
+            } catch (Exception e) {
+
+                System.out.println(
+                        "Model failed: "
+                                + model
+                                + " | Error: "
+                                + e.getMessage()
+                );
+            }
+        }
+
+        return """
+                Risk: UNKNOWN
+                Priority: UNKNOWN
+                Type: AI Service Unavailable
+                Mitigation: Gemini quota exceeded or all models failed. Try again later.
+                """;
     }
 }
