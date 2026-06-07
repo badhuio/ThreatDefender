@@ -45,7 +45,7 @@ public class dataController {
 
     @PostMapping("/urlDataMatching")
     public boolean urlDataMatching(
-            @RequestParam("url") String urlInput) throws MalformedURLException {
+            @RequestParam("payload") String urlInput) throws MalformedURLException {
         Boolean urlMatchingResponse = dataService.urlMatching(urlInput);
 
         if (urlMatchingResponse) {
