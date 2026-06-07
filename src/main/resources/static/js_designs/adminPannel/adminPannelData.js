@@ -151,7 +151,7 @@ document.getElementById('submitBtn').onclick = async function(){
                               try {
 
                                   const urlData = new FormData();
-                                  urlData.append("payload", urlInput.value);
+                                  urlData.append("payload", urlInput);
 
                                   const urlResponse = await fetch("/urlDataMatching", {
                                       method: 'POST',
