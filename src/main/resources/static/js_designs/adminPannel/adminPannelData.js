@@ -28,7 +28,6 @@ document.getElementById('submitBtn').onclick = async function(){
                             fileInputClear.value = "";
                                 let popupMessage = "FILE FORMAT INVALID";
                                 responsePopup(popupMessage);
-
                         }else{
                             await fileSaving(fileInput,fileInputClear);
                         }
@@ -56,8 +55,24 @@ document.getElementById('submitBtn').onclick = async function(){
 
                        if(result === "true"){
                            fileInputClear.value = "";
-                                let popupMessage = "PAYLOAD FOUNDED";
-                                responsePopup(popupMessage);
+//                                let popupMessage = "PAYLOAD FOUNDED";
+//                                responsePopup(popupMessage);
+
+                                           const fileAi = fileData;
+                                           const fileAiResult = await fetch("/ask", {
+                                                method : "POST",
+                                                body : fileAi
+                                           });
+
+                                           console.log("fileAiResult",fileAiResult);
+
+                                                if(fileAiResult !== null){
+                                                    popupMessage = await fileAiResult.text();
+                                                    responsePopup(popupMessage);
+                                                }else{
+                                                    popupMessage = "gemini communication failed";
+                                                    responsePopup(popupMessage);
+                                                }
                        }else{
                            fileInputClear.value = "";
                                 let popupMessage = "PAYLOAD NOT FOUNDED";
