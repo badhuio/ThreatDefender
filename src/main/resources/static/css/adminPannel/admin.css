@@ -447,4 +447,8 @@ h1{
         min-width:600px;
     }
 }
+
+#popupMessage{
+    white-space: pre-line;
+}
 /**/
