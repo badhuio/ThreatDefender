@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.net.MalformedURLException;
 import java.util.List;
 
 @RestController
@@ -18,9 +16,6 @@ public class dataController {
 
     @Autowired
     private dataService dataService;
-
-    @Autowired
-    private geminiService geminiService;
 
     @GetMapping("/ping")
     public String ping() {
@@ -44,7 +39,8 @@ public class dataController {
                 return "PAYLOAD NOT FOUND";
             }
 
-            return ask(payloads);
+
+            return dataService.askFile(payloads);
 
         } catch (Exception e) {
 
@@ -69,7 +65,7 @@ public class dataController {
                 return "PAYLOAD NOT FOUND";
             }
 
-            return ask(payload);
+            return dataService.askUrl(payload);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,60 +90,6 @@ public class dataController {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
-        }
-    }
-
-    @PostMapping("/ask")
-    public String ask(List<Payload> payloads) {
-
-        try {
-
-            StringBuilder payloadText = new StringBuilder();
-
-            for (Payload payload : payloads) {
-
-                payloadText.append("Payload: ")
-                        .append(payload.getPayload());
-
-                if (payload.getPriority() != null) {
-                    payloadText.append(" | Stored Priority: ")
-                            .append(payload.getPriority());
-                }
-
-                payloadText.append("\n");
-            }
-
-            String prompt = """
-        You are a cybersecurity analyst.
-
-        Analyze EVERY payload separately.
-
-        Return EXACTLY in this format:
-
-        Payload: <payload>
-        Risk: LOW/MEDIUM/HIGH
-        Priority: LOW/MEDIUM/HIGH
-        Type: Attack type
-        Mitigation: One short sentence
-
-        Analyze all payloads provided.
-        Do not skip any payload.
-
-        Payloads:
-        """ + payloadText;
-
-            return geminiService.askGemini(prompt);
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-
-            return """
-                Risk: UNKNOWN
-                Priority: UNKNOWN
-                Type: Processing Error
-                Mitigation: Failed to analyze payloads.
-                """;
         }
     }
 }

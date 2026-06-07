@@ -14,11 +14,16 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badhu.ThreatDefender.Service.adminService.geminiService;
+
 @Service
 public class dataService {
 
     @Autowired
     dataRepository dataRepository;
+
+    @Autowired
+    private geminiService geminiService;
 
     public Boolean fileMatching(String fileName){
         return fileName.matches("(?i).+\\.(pdf|txt|jpg|jpeg|png|gif|webp|svg|mp4|webm|ogg|mov|avi|mkv|3gp)$");
@@ -189,5 +194,37 @@ public class dataService {
         }
 
         return true;
+    }
+
+    public String askFile(List<Payload> payloads) {
+
+        String prompt = """
+        Analyze these payloads and return ONLY:
+
+        Risk: LOW/MEDIUM/HIGH
+        Priority: LOW/MEDIUM/HIGH
+        Type: Attack type(s)
+        Mitigation: One short sentence
+
+        Payloads:
+        """ + payloads;
+
+        return geminiService.askGemini(prompt);
+    }
+
+    public String askUrl(Payload payload) {
+
+        String prompt = """
+        Analyze this payload and return ONLY:
+
+        Risk: LOW/MEDIUM/HIGH
+        Priority: LOW/MEDIUM/HIGH
+        Type: Attack type
+        Mitigation: One short sentence
+
+        Payload:
+        """ + payload;
+
+        return geminiService.askGemini(prompt);
     }
 }

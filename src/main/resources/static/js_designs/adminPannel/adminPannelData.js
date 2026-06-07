@@ -151,28 +151,45 @@ document.getElementById('submitBtn').onclick = async function(){
                     }
                 }
 
-           }@PostMapping("/urlDataMatching")
-            public String urlDataMatching(
-                    @RequestParam("payload") String urlInput) {
+           }}else if(currentMode === 'URL'){
+
+                let urlMatchingResult = urlMatching(urlInput);
+
+                if(urlMatchingResult === false){
+                    urlInputClear.value = "";
+                    responsePopup("URL FORMAT INVALID");
+                    return;
+                }
 
                 try {
 
-                    if (!dataService.urlMatching(urlInput)) {
-                        return "URL FORMAT INVALID";
+                    const urlData = new FormData();
+                    urlData.append("payload", urlInput);
+
+                    const urlResponse = await fetch("/urlDataMatching", {
+                        method: "POST",
+                        body: urlData
+                    });
+
+                    if(urlResponse.ok){
+
+                        const result = await urlResponse.text();
+
+                        urlInputClear.value = "";
+
+                        responsePopup(result);
+
+                    }else{
+
+                        responsePopup("URL CHECKING FAILED");
+
                     }
 
-                    Payload payload = dataService.urlChecking(urlInput);
+                }catch(e){
 
-                    if (payload == null) {
-                        return "PAYLOAD NOT FOUND";
-                    }
+                    console.log("Data Passing program failed", e);
+                    responsePopup("URL CHECKING FAILED");
 
-                    return ask(payload);
-
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-                    return "URL CHECKING FAILED";
                 }
             }
 }
