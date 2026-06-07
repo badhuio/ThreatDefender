@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.MalformedURLException;
+import java.util.List;
 
 @RestController
 public class dataController {
@@ -34,35 +35,45 @@ public class dataController {
             String fileName = file.getOriginalFilename();
 
             if (fileName == null || !dataService.fileMatching(fileName)) {
-                return null;
+                return "FILE FORMAT INVALID";
             }
 
-           Payload payloads = dataService.dataExtract(file);
+            List<Payload> payloads = dataService.dataExtract(file);
 
-            if(payloads == null){
+            if (payloads == null || payloads.isEmpty()) {
                 return "PAYLOAD NOT FOUND";
             }
 
-           String responseAi = ask(payloads);
-
-           return responseAi;
+            return ask(payloads);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
 
+            e.printStackTrace();
+            return "PAYLOAD CHECKING FAILED";
+        }
     }
 
     @PostMapping("/urlDataMatching")
-    public boolean urlDataMatching(
-            @RequestParam("payload") String urlInput) throws MalformedURLException {
-        Boolean urlMatchingResponse = dataService.urlMatching(urlInput);
+    public String urlDataMatching(
+            @RequestParam("payload") String urlInput) {
 
-        if (urlMatchingResponse) {
-            return dataService.urlChecking(urlInput);
-        }else  {
-            return false;
+        try {
+
+            if (!dataService.urlMatching(urlInput)) {
+                return "URL FORMAT INVALID";
+            }
+
+            Payload payload = dataService.urlChecking(urlInput);
+
+            if (payload == null) {
+                return "PAYLOAD NOT FOUND";
+            }
+
+            return ask(payload);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "URL CHECKING FAILED";
         }
     }
 
@@ -87,16 +98,56 @@ public class dataController {
     }
 
     @PostMapping("/ask")
-    public String ask(Payload payload) {
+    public String ask(List<Payload> payloads) {
+
+        try {
+
+            StringBuilder payloadText = new StringBuilder();
+
+            for (Payload payload : payloads) {
+
+                payloadText.append("Payload: ")
+                        .append(payload.getPayload());
+
+                if (payload.getPriority() != null) {
+                    payloadText.append(" | Stored Priority: ")
+                            .append(payload.getPriority());
+                }
+
+                payloadText.append("\n");
+            }
+
             String prompt = """
-                Analyze this payload and return ONLY:
-                
-                    Risk: LOW/MEDIUM/HIGH
-                    Priority: LOW/MEDIUM/HIGH
-                    Type: Attack type
-                    Mitigation: One short sentence
-                        Payload:
-                """ + payload;
+        You are a cybersecurity analyst.
+
+        Analyze EVERY payload separately.
+
+        Return EXACTLY in this format:
+
+        Payload: <payload>
+        Risk: LOW/MEDIUM/HIGH
+        Priority: LOW/MEDIUM/HIGH
+        Type: Attack type
+        Mitigation: One short sentence
+
+        Analyze all payloads provided.
+        Do not skip any payload.
+
+        Payloads:
+        """ + payloadText;
+
             return geminiService.askGemini(prompt);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+            return """
+                Risk: UNKNOWN
+                Priority: UNKNOWN
+                Type: Processing Error
+                Mitigation: Failed to analyze payloads.
+                """;
+        }
     }
 }

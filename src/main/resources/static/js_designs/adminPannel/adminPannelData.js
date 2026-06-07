@@ -151,72 +151,30 @@ document.getElementById('submitBtn').onclick = async function(){
                     }
                 }
 
-           }else if(currentMode === 'URL'){
+           }@PostMapping("/urlDataMatching")
+            public String urlDataMatching(
+                    @RequestParam("payload") String urlInput) {
 
-                            let urlMatchingResult = urlMatching(urlInput);
+                try {
 
-                            console.log(urlMatchingResult);
+                    if (!dataService.urlMatching(urlInput)) {
+                        return "URL FORMAT INVALID";
+                    }
 
-                            if(urlMatchingResult === false){
-                                urlInputClear.value = "";
-                                let popupMessage = "URL FORMAT INVALID";
-                                responsePopup(popupMessage);
+                    Payload payload = dataService.urlChecking(urlInput);
 
+                    if (payload == null) {
+                        return "PAYLOAD NOT FOUND";
+                    }
 
-                            }else{
+                    return ask(payload);
 
-                              try {
+                } catch (Exception e) {
 
-                                  const urlData = new FormData();
-                                  urlData.append("payload", urlInput);
-
-                                  const urlResponse = await fetch("/urlDataMatching", {
-                                      method: 'POST',
-                                      body: urlData
-                                  });
-
-                                  if(urlResponse.ok){
-
-                                      const result = await urlResponse.text();
-
-                                      console.log(result, " : result of urlResponse");
-
-                                      if(result === "true"){
-                                           urlInputClear.value = "";
-                                           //let popupMessage = "PAYLOAD FOUND";
-                                           //responsePopup(popupMessage);
-
-                                           const urlAi = urlData;
-                                           const urlAiResult = await fetch("/ask", {
-                                                method : "POST",
-                                                body : urlAi
-                                           });
-
-                                           console.log("urlAiResult",urlAiResult);
-
-                                                if(urlAiResult !== null){
-                                                    popupMessage = await urlAiResult.text();
-                                                    responsePopup(popupMessage);
-                                                }else{
-                                                    popupMessage = "gemini communication failed";
-                                                    responsePopup(popupMessage);
-                                                }
-                                      }else{
-                                           urlInputClear.value = "";
-                                           let popupMessage = "PAYLOAD NOT FOUND";
-                                           responsePopup(popupMessage);
-                                      }
-
-                                  }else{
-                                      let popupMessage = "API CRASHED";
-                                      responsePopup(popupMessage);
-                                  }
-
-                              }catch(e){
-                                  console.log("Data Passing program failed", e);
-                              }
-                            }
-           }
+                    e.printStackTrace();
+                    return "URL CHECKING FAILED";
+                }
+            }
 }
 
 

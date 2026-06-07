@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,7 +33,7 @@ public class dataService {
         return protocol.equals("http") || protocol.equals("https");
     }
 
-    public boolean urlChecking(String url) {
+    public Payload urlChecking(String url) {
 
         try {
 
@@ -49,7 +50,7 @@ public class dataService {
                                         .toLowerCase()
                         )) {
 
-                    return true;
+                    return payload;
                 }
             }
 
@@ -57,7 +58,7 @@ public class dataService {
             e.printStackTrace();
         }
 
-        return false;
+        return null;
     }
 
 
@@ -91,7 +92,8 @@ public class dataService {
 //        return response;
 //    }
 
-    public Payload dataExtract(MultipartFile file) throws IOException, TikaException {
+    public List<Payload> dataExtract(MultipartFile file)
+            throws IOException, TikaException {
 
         Tika tika = new Tika();
 
@@ -99,18 +101,23 @@ public class dataService {
                 .trim()
                 .toLowerCase();
 
-        List<Payload> payloads = dataRepository.findAll();
+        List<Payload> allPayloads = dataRepository.findAll();
 
-        for(Payload payload : payloads){
+        List<Payload> matchedPayloads = new ArrayList<>();
 
-            if(payload.getPayload() != null &&
-                    dataExtracted.contains(payload.getPayload().trim().toLowerCase())){
+        for (Payload payload : allPayloads) {
 
-                return payload;
+            if (payload.getPayload() != null &&
+                    dataExtracted.contains(
+                            payload.getPayload()
+                                    .trim()
+                                    .toLowerCase())) {
+
+                matchedPayloads.add(payload);
             }
         }
 
-        return null;
+        return matchedPayloads;
     }
 
     public boolean fileSaveMatching(String fileName){

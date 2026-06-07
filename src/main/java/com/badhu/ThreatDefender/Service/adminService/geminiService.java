@@ -12,6 +12,10 @@ public class geminiService {
 
     public String askGemini(String prompt) {
 
+        if(prompt == null || prompt.isBlank()){
+            return "Invalid prompt";
+        }
+
         Client client = Client.builder()
                 .apiKey(apiKey)
                 .build();
