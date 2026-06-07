@@ -1,5 +1,6 @@
 package com.badhu.ThreatDefender.Controller.adminController;
 
+import com.badhu.ThreatDefender.Model.Payload;
 import com.badhu.ThreatDefender.Service.adminService.dataService;
 import com.badhu.ThreatDefender.Service.adminService.geminiService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +27,29 @@ public class dataController {
     }
 
     @PostMapping("/fileDataMatching")
-    public boolean fileDataMatching(@RequestParam("file") MultipartFile file) {
+    public String fileDataMatching(@RequestParam("file") MultipartFile file) {
 
         try {
 
             String fileName = file.getOriginalFilename();
 
             if (fileName == null || !dataService.fileMatching(fileName)) {
-                return false;
+                return null;
             }
 
-            return dataService.dataExtract(file);
+           Payload payloads = dataService.dataExtract(file);
+
+            if(payloads == null){
+                return "PAYLOAD NOT FOUND";
+            }
+
+           String responseAi = ask(payloads);
+
+           return responseAi;
 
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
 
     }
@@ -78,7 +87,7 @@ public class dataController {
     }
 
     @PostMapping("/ask")
-    public String ask(@RequestParam String payload) {
+    public String ask(Payload payload) {
         String prompt = """
             Analyze this payload and return ONLY:
             

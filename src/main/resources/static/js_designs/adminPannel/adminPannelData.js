@@ -41,7 +41,7 @@ document.getElementById('submitBtn').onclick = async function(){
 
            //            ajax
                    const fileData = new FormData();
-                   fileData.append("payload",fileInput);
+                   fileData.append("file",fileInput);
 
                    try{
                        const fileResponse = await fetch("/fileDataMatching",{
@@ -53,12 +53,14 @@ document.getElementById('submitBtn').onclick = async function(){
                         const result = await fileResponse.text();
                         console.log(result);
 
-                       if(result === "true"){
+                       if(result !== null){
                            fileInputClear.value = "";
-//                                let popupMessage = "PAYLOAD FOUNDED";
-//                                responsePopup(popupMessage);
+                                let popupMessage = result ;
+                                responsePopup(popupMessage);
 
-                                           const fileAi = fileData;
+
+                                        /*const fileAi = fileData;
+                                        aiData.append("payload", fileInput.value);
                                            const fileAiResult = await fetch("/ask", {
                                                 method : "POST",
                                                 body : fileAi
@@ -72,7 +74,7 @@ document.getElementById('submitBtn').onclick = async function(){
                                                 }else{
                                                     popupMessage = "gemini communication failed";
                                                     responsePopup(popupMessage);
-                                                }
+                                                }*/
                        }else{
                            fileInputClear.value = "";
                                 let popupMessage = "PAYLOAD NOT FOUNDED";

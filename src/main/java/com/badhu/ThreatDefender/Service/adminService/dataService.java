@@ -91,7 +91,7 @@ public class dataService {
 //        return response;
 //    }
 
-    public boolean dataExtract(MultipartFile file) throws IOException, TikaException {
+    public Payload dataExtract(MultipartFile file) throws IOException, TikaException {
 
         Tika tika = new Tika();
 
@@ -106,11 +106,11 @@ public class dataService {
             if(payload.getPayload() != null &&
                     dataExtracted.contains(payload.getPayload().trim().toLowerCase())){
 
-                return true;
+                return payload;
             }
         }
 
-        return false;
+        return null;
     }
 
     public boolean fileSaveMatching(String fileName){
