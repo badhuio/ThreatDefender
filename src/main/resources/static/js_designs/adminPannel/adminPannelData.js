@@ -41,7 +41,7 @@ document.getElementById('submitBtn').onclick = async function(){
 
            //            ajax
                    const fileData = new FormData();
-                   fileData.append("file",fileInput);
+                   fileData.append("payload",fileInput);
 
                    try{
                        const fileResponse = await fetch("/fileDataMatching",{
