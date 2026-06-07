@@ -75,7 +75,7 @@ public class dataController {
         }
     }
 
-    @GetMapping("/ask")
+    @PostMapping("/ask")
     public String ask(@RequestParam String payload) {
         String prompt = """
             Analyze this payload.

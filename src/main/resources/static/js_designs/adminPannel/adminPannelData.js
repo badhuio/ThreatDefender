@@ -151,7 +151,7 @@ document.getElementById('submitBtn').onclick = async function(){
                               try {
 
                                   const urlData = new FormData();
-                                  urlData.append("payload", urlInput);
+                                  urlData.append("payload", urlInput.value);
 
                                   const urlResponse = await fetch("/urlDataMatching", {
                                       method: 'POST',
@@ -194,7 +194,6 @@ document.getElementById('submitBtn').onclick = async function(){
                                       let popupMessage = "API CRASHED";
                                       responsePopup(popupMessage);
                                   }
-
 
                               }catch(e){
                                   console.log("Data Passing program failed", e);
