@@ -22,6 +22,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+	implementation("com.google.genai:google-genai:1.55.0")
 
 	implementation("org.apache.tika:tika-core:3.2.1")
 	implementation("org.apache.tika:tika-parsers-standard-package:3.2.1")

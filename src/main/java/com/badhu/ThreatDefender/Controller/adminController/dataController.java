@@ -75,8 +75,17 @@ public class dataController {
         }
     }
 
-    @PostMapping("/urlAi")
-    public String urlAi(@RequestParam("url") String urlAi){
-        return geminiService.urlAi(urlAi);
+    @GetMapping("/ask")
+    public String ask(@RequestParam String payload) {
+        String prompt = """
+            Analyze this payload.
+            Need:
+                1. Risk level
+                2. Priority
+                3. How it affects the system
+                4. Mitigation steps
+                   Payload:
+                """ + payload;
+        return geminiService.askGemini(prompt);
     }
 }

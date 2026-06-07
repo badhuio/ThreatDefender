@@ -151,7 +151,7 @@ document.getElementById('submitBtn').onclick = async function(){
                               try {
 
                                   const urlData = new FormData();
-                                  urlData.append("url", urlInput);
+                                  urlData.append("payload", urlInput);
 
                                   const urlResponse = await fetch("/urlDataMatching", {
                                       method: 'POST',
@@ -170,14 +170,14 @@ document.getElementById('submitBtn').onclick = async function(){
                                            //responsePopup(popupMessage);
 
                                            const urlAi = urlData;
-                                           const urlAiResult = await fetch("/urlAi", {
-                                                method : "POST",
+                                           const urlAiResult = await fetch("/ask", {
+                                                method : "GET",
                                                 body : urlAi
                                            });
 
                                            console.log("urlAiResult",urlAiResult);
 
-                                                if(!urlAiResult == null){
+                                                if(urlAiResult !== null){
                                                     popupMessage = await urlAiResult.text();
                                                     responsePopup(popupMessage);
                                                 }else{
