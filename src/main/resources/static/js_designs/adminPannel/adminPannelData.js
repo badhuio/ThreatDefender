@@ -151,7 +151,7 @@ document.getElementById('submitBtn').onclick = async function(){
                     }
                 }
 
-           }}else if(currentMode === 'URL'){
+           }else if(currentMode === 'URL'){
 
                 let urlMatchingResult = urlMatching(urlInput);
 
