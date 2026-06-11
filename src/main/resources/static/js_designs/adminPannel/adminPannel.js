@@ -46,9 +46,17 @@ function responsePopup(data){
     popup.textContent = "";
 
     data.forEach(item => {
+
         const card = document.createElement("div");
         card.className = "result-card";
-        card.textContent = `${item.type} | ${item.risk} | ${item.priority}`;
+
+        card.append(
+            document.createTextNode(item.type || "-"),
+            document.createTextNode(item.risk || "-"),
+            document.createTextNode(item.priority || "-"),
+            document.createTextNode(item.mitigation || "-")
+        );
+
         popup.appendChild(card);
     });
 
