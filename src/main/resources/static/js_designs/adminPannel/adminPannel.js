@@ -50,12 +50,19 @@ function responsePopup(data){
         const card = document.createElement("div");
         card.className = "result-card";
 
-        card.append(
-            document.createTextNode(item.type || "-"),
-            document.createTextNode(item.risk || "-"),
-            document.createTextNode(item.priority || "-"),
-            document.createTextNode(item.mitigation || "-")
-        );
+        const type = document.createElement("span");
+        type.textContent = item.type || "-";
+
+        const risk = document.createElement("span");
+        risk.textContent = item.risk || "-";
+
+        const priority = document.createElement("span");
+        priority.textContent = item.priority || "-";
+
+        const mitigation = document.createElement("span");
+        mitigation.textContent = item.mitigation || "-";
+
+        card.append(type, risk, priority, mitigation);
 
         popup.appendChild(card);
     });
