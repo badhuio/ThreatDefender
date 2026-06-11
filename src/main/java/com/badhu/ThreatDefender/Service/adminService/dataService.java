@@ -202,7 +202,8 @@ public class dataService {
     public String askFile(List<Payload> payloads) {
 
         String prompt = """
-        Analyze these payloads and return ONLY:
+        
+        Analyze these payloads and Return ONLY valid JSON:
 
         Risk: LOW/MEDIUM/HIGH
         Priority: LOW/MEDIUM/HIGH
@@ -218,7 +219,7 @@ public class dataService {
     public String askUrl(Payload payload) {
 
         String prompt = """
-        Analyze this payload and return ONLY:
+        Analyze this payload and Return ONLY valid JSON.:
 
         Risk: LOW/MEDIUM/HIGH
         Priority: LOW/MEDIUM/HIGH
