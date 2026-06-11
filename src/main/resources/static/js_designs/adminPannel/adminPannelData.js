@@ -51,11 +51,19 @@ document.getElementById('submitBtn').onclick = async function(){
                        if(fileResponse.ok){
 
                         const result = await fileResponse.text();
-                        console.log(result);
 
                        if(result !== null){
+
+                        let clean = result
+                            .replace(/```json/g, "")
+                            .replace(/```/g, "")
+                            .trim();
+
+                        const data = JSON.parse(clean);
+                        console.log(data);
+
                            fileInputClear.value = "";
-                                let popupMessage = result ;
+                                let popupMessage = JSON.stringify(data, null, 2);
                                 responsePopup(popupMessage);
 
 
@@ -175,9 +183,18 @@ document.getElementById('submitBtn').onclick = async function(){
 
                         const result = await urlResponse.text();
 
-                        urlInputClear.value = "";
+                            let clean = result
+                                .replace(/```json/g, "")
+                                .replace(/```/g, "")
+                                .trim();
 
-                        responsePopup(result);
+                            const data = JSON.parse(clean);
+
+                            urlInputClear.value = "";
+
+
+                        let popupMessage = JSON.stringify(data, null, 2);
+                        responsePopup(popupMessage);
 
                     }else{
 

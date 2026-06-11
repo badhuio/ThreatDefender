@@ -202,15 +202,21 @@ public class dataService {
     public String askFile(List<Payload> payloads) {
 
         String prompt = """
-        
-        Analyze these payloads and Return ONLY valid JSON:
+                Return ONLY a JSON array.
+                Do not use markdown.
+                Do not use ```json.
 
-        Risk: LOW/MEDIUM/HIGH
-        Priority: LOW/MEDIUM/HIGH
-        Type: Attack type(s)
-        Mitigation: One short sentence
+                    [
+                        {
+                            "payload":"",
+                            "risk":"",
+                            "priority":"",
+                            "type":"",
+                            "mitigation":""
+                        }
+                    ]
 
-        Payloads:
+                Payloads:
         """ + payloads;
 
         return geminiService.askGemini(prompt);
@@ -219,15 +225,22 @@ public class dataService {
     public String askUrl(Payload payload) {
 
         String prompt = """
-        Analyze this payload and Return ONLY valid JSON.:
+        Return ONLY a JSON array.
+                Do not use markdown.
+                Do not use ```json.
 
-        Risk: LOW/MEDIUM/HIGH
-        Priority: LOW/MEDIUM/HIGH
-        Type: Attack type
-        Mitigation: One short sentence
+                    [
+                        {
+                            "payload":"",
+                            "risk":"",
+                            "priority":"",
+                            "type":"",
+                            "mitigation":""
+                        }
+                    ]
 
-        Payload:
-        """ + payload;
+                Payloads:
+        """ + payloads;
 
         return geminiService.askGemini(prompt);
     }
