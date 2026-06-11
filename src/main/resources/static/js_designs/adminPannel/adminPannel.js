@@ -40,9 +40,19 @@ function dataMode(type, btn){
 
 //popupMessages
 
-function responsePopup(popupMessage){
-    document.getElementById('popupMessage').textContent = popupMessage;
-    document.getElementById('popup').style.display = 'block';
+function responsePopup(data){
+
+    const popup = document.getElementById("popupMessage");
+    popup.textContent = "";
+
+    data.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "result-card";
+        card.textContent = `${item.type} | ${item.risk} | ${item.priority}`;
+        popup.appendChild(card);
+    });
+
+    document.getElementById("popup").style.display = "block";
 }
 
 //close after click "ok"

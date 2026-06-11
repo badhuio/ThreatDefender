@@ -63,8 +63,7 @@ document.getElementById('submitBtn').onclick = async function(){
                         console.log(data);
 
                            fileInputClear.value = "";
-                                let popupMessage = JSON.stringify(data, null, 2);
-                                responsePopup(popupMessage);
+                                responsePopup(data);
 
 
                                         /*const fileAi = fileData;
