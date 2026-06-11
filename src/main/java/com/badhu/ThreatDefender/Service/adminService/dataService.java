@@ -240,7 +240,7 @@ public class dataService {
                     ]
 
                 Payloads:
-        """ + payloads;
+        """ + payload;
 
         return geminiService.askGemini(prompt);
     }
