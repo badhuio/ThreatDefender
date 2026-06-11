@@ -4,7 +4,6 @@ import com.badhu.ThreatDefender.Model.Payload;
 import com.badhu.ThreatDefender.Repository.adminRepository.dataRepository;
 import org.apache.tika.Tika;
 import org.apache.tika.exception.TikaException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,19 +13,23 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badhu.ThreatDefender.Service.adminService.geminiService;
 
 @Service
 public class dataService {
 
-    @Autowired
-    dataRepository dataRepository;
+    private final dataRepository dataRepository;
+    private final geminiService geminiService;
 
-    @Autowired
-    private geminiService geminiService;
+    public dataService(dataRepository dataRepository,
+                       geminiService geminiService) {
+        this.dataRepository = dataRepository;
+        this.geminiService = geminiService;
+    }
+
+
 
     public Boolean fileMatching(String fileName){
-        return fileName.matches("(?i).+\\.(pdf|txt|jpg|jpeg|png|gif|webp|svg|mp4|webm|ogg|mov|avi|mkv|3gp)$");
+        return fileName.matches("(?i).+\\.(pdf)$");
     }
 
     public Boolean urlMatching(String urlInput) throws MalformedURLException {

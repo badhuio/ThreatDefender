@@ -2,8 +2,7 @@ package com.badhu.ThreatDefender.Controller.adminController;
 
 import com.badhu.ThreatDefender.Model.Payload;
 import com.badhu.ThreatDefender.Service.adminService.dataService;
-import com.badhu.ThreatDefender.Service.adminService.geminiService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.badhu.ThreatDefender.Service.mcp.mcpTools;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,8 +13,15 @@ import java.util.List;
 @RestController
 public class dataController {
 
-    @Autowired
-    private dataService dataService;
+    private final dataService dataService;
+    private final mcpTools mcpTools;
+
+    public dataController(dataService dataService, mcpTools mcpTools) {
+        this.dataService = dataService;
+        this.mcpTools = mcpTools;
+    }
+
+
 
     @GetMapping("/ping")
     public String ping() {
@@ -25,6 +31,8 @@ public class dataController {
     @PostMapping("/fileDataMatching")
     public String fileDataMatching(@RequestParam("file") MultipartFile file) {
 
+        List<Payload> payloads;
+
         try {
 
             String fileName = file.getOriginalFilename();
@@ -33,14 +41,12 @@ public class dataController {
                 return "FILE FORMAT INVALID";
             }
 
-            List<Payload> payloads = dataService.dataExtract(file);
+             payloads = dataService.dataExtract(file);
 
             if (payloads == null || payloads.isEmpty()) {
                 return "PAYLOAD NOT FOUND";
             }
-
-
-            return dataService.askFile(payloads);
+                return mcpTools.scanFile(payloads);
 
         } catch (Exception e) {
 
@@ -55,17 +61,24 @@ public class dataController {
 
         try {
 
-            if (!dataService.urlMatching(urlInput)) {
+            if (urlInput != null) {
+                return mcpTools.scanUrl(urlInput);
+            }else{
+                return "url is null";
+            }
+
+
+           /* if (!dataService.urlMatching(urlInput)) {
                 return "URL FORMAT INVALID";
             }
 
-            Payload payload = dataService.urlChecking(urlInput);
+            Payload payload = dataService.urlChecking(urlInput);         //its commented because added mcp
 
             if (payload == null) {
                 return "PAYLOAD NOT FOUND";
             }
 
-            return dataService.askUrl(payload);
+            return dataService.askUrl(payload);*/
 
         } catch (Exception e) {
             e.printStackTrace();

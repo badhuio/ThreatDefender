@@ -27,6 +27,9 @@ dependencies {
 	implementation("org.apache.tika:tika-core:3.2.1")
 	implementation("org.apache.tika:tika-parsers-standard-package:3.2.1")
 
+	implementation(platform("org.springframework.ai:spring-ai-bom:1.0.1"))
+	implementation ("org.springframework.ai:spring-ai-starter-mcp-server")
+
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 
