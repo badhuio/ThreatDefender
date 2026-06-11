@@ -201,23 +201,36 @@ public class dataService {
 
     public String askFile(List<Payload> payloads) {
 
+        List<String> payloadTexts = payloads.stream()
+                .map(Payload::getPayload)
+                .toList();
+
         String prompt = """
-                Return ONLY a JSON array.
-                Do not use markdown.
-                Do not use ```json.
+    Analyze the following payloads.
 
-                    [
-                        {
-                            "payload":"",
-                            "risk":"",
-                            "priority":"",
-                            "type":"",
-                            "mitigation":""
-                        }
-                    ]
+    You MUST determine:
+    - risk (LOW, MEDIUM, HIGH)
+    - priority (LOW, MEDIUM, HIGH)
+    - attack type
+    - mitigation
 
-                Payloads:
-        """ + payloads;
+    NEVER leave any field empty.
+    NEVER return null.
+
+    Return ONLY valid JSON.
+
+    [
+      {
+        "payload":"",
+        "risk":"",
+        "priority":"",
+        "type":"",
+        "mitigation":""
+      }
+    ]
+
+    Payloads:
+    """ + payloadTexts;
 
         return geminiService.askGemini(prompt);
     }
@@ -225,22 +238,43 @@ public class dataService {
     public String askUrl(Payload payload) {
 
         String prompt = """
-        Return ONLY a JSON array.
-                Do not use markdown.
-                Do not use ```json.
+    Analyze the following payload.
 
-                    [
-                        {
-                            "payload":"",
-                            "risk":"",
-                            "priority":"",
-                            "type":"",
-                            "mitigation":""
-                        }
-                    ]
+    You MUST determine:
+    - risk (LOW, MEDIUM, HIGH)
+    - priority (LOW, MEDIUM, HIGH)
+    - attack type
+    - mitigation
 
-                Payloads:
-        """ + payload;
+    NEVER leave any field empty.
+    NEVER return null.
+
+    Return ONLY valid JSON.
+
+    [
+      {
+        "payload":"",
+        "risk":"",
+        "priority":"",
+        "type":"",
+        "mitigation":""
+      }
+    ]
+
+    Example:
+
+    [
+      {
+        "payload":"<script>alert('xss')</script>",
+        "risk":"HIGH",
+        "priority":"HIGH",
+        "type":"Cross-Site Scripting (XSS)",
+        "mitigation":"Validate and encode user input."
+      }
+    ]
+
+    Payload:
+    """ + payload.getPayload();
 
         return geminiService.askGemini(prompt);
     }
