@@ -1,45 +1,43 @@
 function dataMode(type, btn){
 
-   currentMode = type;
-   var dropZone = document.getElementById('dropZone');
-   var urlInput = document.getElementById('urlInput');
-   var fileInput = document.getElementById('fileInput');
-   const span = document.querySelector('.drop-label span');
+    currentMode = type;
+    var dropZone = document.getElementById('dropZone');
+    var urlInput = document.getElementById('urlInput');
+    var fileInput = document.getElementById('fileInput');
+    const span = document.querySelector('.drop-label span');
 
-   fileInput.style.display = 'none';
-   urlInput.style.display = 'none';
+    fileInput.style.display = 'none';
+    urlInput.style.display = 'none';
 
     var tabs = document.querySelectorAll(".tab");
-    for (i=0; i<tabs.length; i++){
+    for (let i = 0; i < tabs.length; i++){
         tabs[i].classList.remove("active");
     }
-        btn.classList.add("active");
+    btn.classList.add("active");
 
-   if(currentMode == 'URL'){
+    if (currentMode == 'URL'){
         urlInput.style.display = 'block';
-        urlInput.accept = 'URL';
         dropZone.style.display = 'none';
-   }else if(currentMode == 'IMAGE'){
+    } else if (currentMode == 'IMAGE'){
         span.textContent = 'browse image';
         dropZone.style.display = 'block';
         fileInput.style.display = 'block';
         fileInput.accept = '.jpg,.jpeg,.png,.webp,.svg';
-   }else if(currentMode == 'VIDEO'){
+    } else if (currentMode == 'VIDEO'){
         span.textContent = 'browse video';
         dropZone.style.display = 'block';
         fileInput.style.display = 'block';
         fileInput.accept = '.mp4,.webm,.ogg,.mov,.avi,.mkv';
-   }else{
+    } else {
         span.textContent = 'browse file';
         dropZone.style.display = 'block';
         fileInput.style.display = 'block';
         fileInput.accept = '.pdf,.doc,.docx,.txt,.xls,.xlsx,.ppt,.pptx,.zip,.rar';
-   }
+    }
 }
 
 
 //popupMessages
-
 
 function responsePopup(data) {
 
@@ -71,6 +69,7 @@ function responsePopup(data) {
     document.getElementById("popup").style.display = "block";
 }
 
+
 //close after click "ok"
 
 function closePopup(){
@@ -80,53 +79,18 @@ function closePopup(){
 
 //crossCheck
 
- function fileMatching(fileInputName){
-      return /\.(pdf|txt|ppt|pptx|zip|rar)$/i.test(fileInputName);
- }
+function fileMatching(fileInputName){
+    return /\.(pdf|txt|ppt|pptx|zip|rar)$/i.test(fileInputName);
+}
 // function fileSaveMatching(fileInputName){
-//      return /\.(doc|docx)$/i.test(fileInputName);
+//     return /\.(doc|docx)$/i.test(fileInputName);
 // }
 
-
-
- function urlMatching(urlInput){
-    try{
-        const url = new Ufunction responsePopup(data){
-
-    const popup = document.getElementById("popupMessage");
-    popup.textContent = "";
-
-    if (Array.isArray(data)) {
-
-        data.forEach(item => {
-
-            const card = document.createElement("div");
-            card.className = "result-card";
-
-            const type = document.createElement("span");
-            type.textContent = item.type || "-";
-
-            const risk = document.createElement("span");
-            risk.textContent = item.risk || "-";
-
-            const priority = document.createElement("span");
-            priority.textContent = item.priority || "-";
-
-            const mitigation = document.createElement("span");
-            mitigation.textContent = item.mitigation || "-";
-
-            card.append(type, risk, priority, mitigation);
-            popup.appendChild(card);
-        });
-
-    } else {
-        popup.textContent = data.message || data;
-    }
-
-    document.getElementById("popup").style.display = "block";
-}RL(urlInput.trim());
+function urlMatching(urlInput){
+    try {
+        const url = new URL(urlInput.trim());
         return url.protocol === 'http:' || url.protocol === 'https:';
-    }catch(e){
+    } catch (e) {
         return false;
     }
- }
+}
