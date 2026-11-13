@@ -1,241 +1,243 @@
 let currentMode = 'FILE';
 
-document.getElementById('submitBtn').onclick = async function(){
-           var fileInput = document.getElementById('fileInput').files[0];
-           var urlInput = document.getElementById('urlInput').value;
+// ---------- helpers ----------
 
-                var fileInputClear = document.getElementById("fileInput");
-                var urlInputClear = document.getElementById('urlInput');
-
-
-           if(currentMode === 'FILE' ){
-
-            if(!fileInput ){
-                let popupMessage = "ADD FILE TO CHECK";
-                responsePopup(popupMessage);
-                return;
-            }
-
-               var fileMatchingResult = fileMatching(fileInput.name);
-
-                if(fileMatchingResult == false){
-                    try{
-                        let fileSaved = await fileSaveMatching(fileInput.name);
-
-                        console.log("fileSaved:",fileSaved);
-
-                        if(fileSaved == false){
-                            fileInputClear.value = "";
-                                let popupMessage = "FILE FORMAT INVALID";
-                                responsePopup(popupMessage);
-                        }else{
-                            await fileSaving(fileInput,fileInputClear);
-                        }
-
-                    }catch (e){
-                    console.log("fileSaving failed",e)
-                    }
-                }
-
-                   if(fileMatchingResult == true){
-
-           //            ajax
-                   const fileData = new FormData();
-                   fileData.append("file",fileInput);
-
-                   try{
-                       const fileResponse = await fetch("/fileDataMatching",{
-                             method: "POST",
-                             body:  fileData
-                       });
-                       if(fileResponse.ok){
-
-                        const result = await fileResponse.text();
-
-                       if(result !== null){
-
-                        let clean = result
-                            .replace(/```json/g, "")
-                            .replace(/```/g, "")
-                            .trim();
-
-                        let data;  try {     data = JSON.parse(clean); } catch {     data = clean; }
-                        console.log(data);
-
-                           fileInputClear.value = "";
-                                responsePopup(data);
-
-
-                                        /*const fileAi = fileData;
-                                        aiData.append("payload", fileInput.value);
-                                           const fileAiResult = await fetch("/ask", {
-                                                method : "POST",
-                                                body : fileAi
-                                           });
-
-                                           console.log("fileAiResult",fileAiResult);
-
-                                                if(fileAiResult !== null){
-                                                    popupMessage = await fileAiResult.text();
-                                                    responsePopup(popupMessage);
-                                                }else{
-                                                    popupMessage = "gemini communication failed";
-                                                    responsePopup(popupMessage);
-                                                }*/
-                       }else{
-                           fileInputClear.value = "";
-                                let popupMessage = "PAYLOAD NOT FOUNDED";
-                                responsePopup(popupMessage);
-                       }
-
-                       }else{
-                           fileInputClear.value = "";
-                                let popupMessage = "PAYLOAD CHECKING FAILED";
-                                responsePopup(popupMessage);
-                       }
-                   }catch(e){
-                        console.error("Data Passing program failed",e);
-                   }}
-
-           }else if(currentMode === 'IMAGE'){
-                var imageMatchingResult = fileMatching(fileInput.name);
-
-                 if(!videoMatchingResult == true){
-//                     errorPopup();
-                     fileInputClear.value = "";
-                 }
-
-                if(imageMatchingResult === true){
-
-                    try{
-                        const imageData = new FormData();
-                        imageData.append("image",fileInput);
-
-                        const imageResponse = await fetch("/imageDataMatching", {
-                              method : "POST",
-                              body : imageData
-                        });
-
-                            if(imageResponse.ok){
-//                                matchPopup();
-                                fileInputClear.value = "";
-                            }else{
-//                                elsePopup();
-                                fileInputClear.value = "";
-                            }
-                    }catch (e){
-                        console.log("Data Passing program failed",e);
-                    }}
-
-           }else if(currentMode === 'VIDEO'){
-                var videoMatchingResult = fileMatching(fileInput.name);
-
-                if(!videoMatchingResult == true){
-//                    errorPopup();
-                    fileInputClear.value = "";
-                }
-
-                if(videoMatchingResult == true){
-                    try{
-
-                        const videoData = new FormData();
-                        videoData.append("Video", fileInput);
-
-                        const videoResponse = await fetch("/videoDataMatching", {
-                              method : "POST",
-                              body : videoData
-                        });
-
-                        if(videoResponse.ok){
-//                            matchPopup();
-                            fileInputClear.value = "";
-                        }else{
-//                            elsePopup();
-                            fileInputClear.value = "";
-                        }
-                    }catch(e){
-                        console.log("Data Passing program failed",e);
-                    }
-                }
-
-           }else if(currentMode === 'URL'){
-
-                let urlMatchingResult = urlMatching(urlInput);
-
-                if(urlMatchingResult === false){
-                    urlInputClear.value = "";
-                    responsePopup("URL FORMAT INVALID");
-                    return;
-                }
-
-                try {
-
-                    const urlData = new FormData();
-                    urlData.append("payload", urlInput);
-
-                    const urlResponse = await fetch("/urlDataMatching", {
-                        method: "POST",
-                        body: urlData
-                    });
-
-                    if(urlResponse.ok){
-
-                        const result = await urlResponse.text();
-
-                            let clean = result
-                                .replace(/```json/g, "")
-                                .replace(/```/g, "")
-                                .trim();
-
-                            let data;  try {     data = JSON.parse(clean); } catch {     data = clean; }
-
-                            urlInputClear.value = "";
-
-
-
-                        responsePopup(data);
-
-                    }else{
-
-                        responsePopup("URL CHECKING FAILED");
-
-                    }
-
-                }catch(e){
-
-                    console.log("Data Passing program failed", e);
-                    responsePopup("URL CHECKING FAILED");
-
-                }
-            }
+function parseResult(result) {
+    const clean = result
+        .replace(/```json/g, "")
+        .replace(/```/g, "")
+        .trim();
+    try {
+        return JSON.parse(clean);
+    } catch {
+        return clean;
+    }
 }
 
+function isEmptyPayload(data) {
+    if (data === null || data === undefined) return true;
+    if (typeof data === "string") return data.trim() === "";
+    if (Array.isArray(data)) return data.length === 0;
+    if (typeof data === "object") return Object.keys(data).length === 0;
+    return false;
+}
 
-        async function fileSaving(fileInput,fileInputClear){
-                try{
-                    const fileData = new FormData();
-                    fileData.append("file",fileInput);
+// shared by FILE and URL
+async function handleAiResponse(response, inputToClear) {
+    if (!response.ok) {
+        inputToClear.value = "";
+        responsePopup("PAYLOAD CHECKING FAILED");
+        return;
+    }
 
-                        try{
-                            const fileResponse = await fetch('/fileDataSaving',{
-                                method : 'POST',
-                                body : fileData
-                            });
+    const result = await response.text();
+    const data = parseResult(result);
+    inputToClear.value = "";
 
-                            if(fileResponse.ok){
-                                fileInputClear.value = "";
-                                    let popupMessage = "PAYLOAD SAVED SUCCESSFULLY";
-                                    responsePopup(popupMessage);
-                            }else{
-                                fileInputClear.value = "";
-                                     let popupMessage = "PAYLOAD FAILED TO SAVE";
-                                     responsePopup(popupMessage);
-                            }
-                        }catch(e){
-                            console.log("Data Passing Program Failed",e);
-                        }
+    if (isEmptyPayload(data)) {
+        responsePopup("PAYLOAD NOT FOUND");   // not found popup
+    } else {
+        responsePopup(data);                  // found popup
+    }
+}
 
-                }catch(e){
-                    console.log("error",e);
-                }
-           }
+// ---------- submit ----------
+
+document.getElementById('submitBtn').onclick = async function () {
+    const fileInputClear = document.getElementById("fileInput");
+    const urlInputClear = document.getElementById("urlInput");
+    const fileInput = fileInputClear.files[0];
+    const urlInput = urlInputClear.value;
+
+    if (currentMode === 'FILE') {
+
+        if (!fileInput) {
+            responsePopup("ADD FILE TO CHECK");
+            return;
+        }
+
+        // FUTURE: doc/docx save-only flow. To enable, uncomment this block,
+        // the fileSaveMatching function in adminPannel.js, and fileSaving() below.
+        /*
+        if (fileSaveMatching(fileInput.name)) {
+            await fileSaving(fileInput, fileInputClear);
+            return;
+        }
+        */
+
+        // file format check
+        if (!fileMatching(fileInput.name)) {
+            fileInputClear.value = "";
+            responsePopup("FILE FORMAT INVALID");
+            return;
+        }
+
+        // payload check
+        try {
+            const fileData = new FormData();
+            fileData.append("file", fileInput);
+
+            const fileResponse = await fetch("/fileDataMatching", {
+                method: "POST",
+                body: fileData
+            });
+
+            await handleAiResponse(fileResponse, fileInputClear);
+        } catch (e) {
+            console.error("Data Passing program failed", e);
+            fileInputClear.value = "";
+            responsePopup("PAYLOAD CHECKING FAILED");
+        }
+
+    // FUTURE: IMAGE mode. Uncomment this block and imageMatching in adminPannel.js.
+    /*
+    } else if (currentMode === 'IMAGE') {
+
+        if (!fileInput) {
+            responsePopup("ADD IMAGE TO CHECK");
+            return;
+        }
+
+        if (!imageMatching(fileInput.name)) {
+            fileInputClear.value = "";
+            responsePopup("IMAGE FORMAT INVALID");
+            return;
+        }
+
+        try {
+            const imageData = new FormData();
+            imageData.append("image", fileInput);
+
+            const imageResponse = await fetch("/imageDataMatching", {
+                method: "POST",
+                body: imageData
+            });
+
+            fileInputClear.value = "";
+            responsePopup(imageResponse.ok ? "IMAGE CHECKED" : "IMAGE CHECKING FAILED");
+        } catch (e) {
+            console.log("Data Passing program failed", e);
+            fileInputClear.value = "";
+            responsePopup("IMAGE CHECKING FAILED");
+        }
+    */
+
+    // FUTURE: VIDEO mode. Uncomment this block and videoMatching in adminPannel.js.
+    /*
+    } else if (currentMode === 'VIDEO') {
+
+        if (!fileInput) {
+            responsePopup("ADD VIDEO TO CHECK");
+            return;
+        }
+
+        if (!videoMatching(fileInput.name)) {
+            fileInputClear.value = "";
+            responsePopup("VIDEO FORMAT INVALID");
+            return;
+        }
+
+        try {
+            const videoData = new FormData();
+            videoData.append("Video", fileInput);
+
+            const videoResponse = await fetch("/videoDataMatching", {
+                method: "POST",
+                body: videoData
+            });
+
+            fileInputClear.value = "";
+            responsePopup(videoResponse.ok ? "VIDEO CHECKED" : "VIDEO CHECKING FAILED");
+        } catch (e) {
+            console.log("Data Passing program failed", e);
+            fileInputClear.value = "";
+            responsePopup("VIDEO CHECKING FAILED");
+        }
+    */
+
+    } else if (currentMode === 'URL') {
+
+        if (!urlInput.trim()) {
+            responsePopup("ADD URL TO CHECK");
+            return;
+        }
+
+        // url format check
+        if (!urlMatching(urlInput)) {
+            urlInputClear.value = "";
+            responsePopup("URL FORMAT INVALID");
+            return;
+        }
+
+        // payload check
+        try {
+            const urlData = new FormData();
+            urlData.append("payload", urlInput.trim());
+
+            const urlResponse = await fetch("/urlDataMatching", {
+                method: "POST",
+                body: urlData
+            });
+
+            await handleAiResponse(urlResponse, urlInputClear);
+        } catch (e) {
+            console.log("Data Passing program failed", e);
+            urlInputClear.value = "";
+            responsePopup("URL CHECKING FAILED");
+        }
+
+    } else {
+        // IMAGE / VIDEO tabs are not active yet
+        fileInputClear.value = "";
+        responsePopup("THIS MODE IS NOT AVAILABLE YET");
+    }
+};
+
+// ---------- save (FUTURE) ----------
+/*
+async function fileSaving(fileInput, fileInputClear) {
+    try {
+        const fileData = new FormData();
+        fileData.append("file", fileInput);
+
+        const fileResponse = await fetch('/fileDataSaving', {
+            method: 'POST',
+            body: fileData
+        });
+
+        fileInputClear.value = "";
+        responsePopup(fileResponse.ok ? "PAYLOAD SAVED SUCCESSFULLY" : "PAYLOAD FAILED TO SAVE");
+    } catch (e) {
+        console.log("Data Passing Program Failed", e);
+        fileInputClear.value = "";
+        responsePopup("PAYLOAD FAILED TO SAVE");
+    }
+}
+*/
+
+//crossCheck
+
+function fileMatching(fileInputName){
+    return /\.(pdf|txt|ppt|pptx|zip|rar)$/i.test(fileInputName);
+}
+
+function urlMatching(urlInput){
+    try {
+        const url = new URL(urlInput.trim());
+        return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch (e) {
+        return false;
+    }
+}
+
+// FUTURE
+// function fileSaveMatching(fileInputName){
+//     return /\.(doc|docx)$/i.test(fileInputName);
+// }
+// function imageMatching(fileInputName){
+//     return /\.(jpg|jpeg|png|webp|svg)$/i.test(fileInputName);
+// }
+// function videoMatching(fileInputName){
+//     return /\.(mp4|webm|ogg|mov|avi|mkv)$/i.test(fileInputName);
+// }
+
