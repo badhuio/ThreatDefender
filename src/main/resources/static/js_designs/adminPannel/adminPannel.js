@@ -40,32 +40,33 @@ function dataMode(type, btn){
 
 //popupMessages
 
-function responsePopup(data){
+
+function responsePopup(data) {
 
     const popup = document.getElementById("popupMessage");
     popup.textContent = "";
 
-    data.forEach(item => {
+    if (Array.isArray(data)) {
 
-        const card = document.createElement("div");
-        card.className = "result-card";
+        data.forEach(item => {
 
-        const type = document.createElement("span");
-        type.textContent = item.type || "-";
+            const card = document.createElement("div");
+            card.className = "result-card";
 
-        const risk = document.createElement("span");
-        risk.textContent = item.risk || "-";
+            ["type", "risk", "priority", "mitigation"].forEach(key => {
+                const span = document.createElement("span");
+                span.textContent = item[key] || "-";
+                card.appendChild(span);
+            });
 
-        const priority = document.createElement("span");
-        priority.textContent = item.priority || "-";
+            popup.appendChild(card);
+        });
 
-        const mitigation = document.createElement("span");
-        mitigation.textContent = item.mitigation || "-";
-
-        card.append(type, risk, priority, mitigation);
-
-        popup.appendChild(card);
-    });
+    } else {
+        popup.textContent = typeof data === "string"
+            ? data
+            : data.message || "Something went wrong";
+    }
 
     document.getElementById("popup").style.display = "block";
 }
