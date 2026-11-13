@@ -90,7 +90,40 @@ function closePopup(){
 
  function urlMatching(urlInput){
     try{
-        const url = new URL(urlInput.trim());
+        const url = new Ufunction responsePopup(data){
+
+    const popup = document.getElementById("popupMessage");
+    popup.textContent = "";
+
+    if (Array.isArray(data)) {
+
+        data.forEach(item => {
+
+            const card = document.createElement("div");
+            card.className = "result-card";
+
+            const type = document.createElement("span");
+            type.textContent = item.type || "-";
+
+            const risk = document.createElement("span");
+            risk.textContent = item.risk || "-";
+
+            const priority = document.createElement("span");
+            priority.textContent = item.priority || "-";
+
+            const mitigation = document.createElement("span");
+            mitigation.textContent = item.mitigation || "-";
+
+            card.append(type, risk, priority, mitigation);
+            popup.appendChild(card);
+        });
+
+    } else {
+        popup.textContent = data.message || data;
+    }
+
+    document.getElementById("popup").style.display = "block";
+}RL(urlInput.trim());
         return url.protocol === 'http:' || url.protocol === 'https:';
     }catch(e){
         return false;
