@@ -59,7 +59,7 @@ document.getElementById('submitBtn').onclick = async function(){
                             .replace(/```/g, "")
                             .trim();
 
-                        const data = JSON.parse(clean);
+                        let data;  try {     data = JSON.parse(clean); } catch {     data = clean; }
                         console.log(data);
 
                            fileInputClear.value = "";
@@ -187,7 +187,7 @@ document.getElementById('submitBtn').onclick = async function(){
                                 .replace(/```/g, "")
                                 .trim();
 
-                            const data = JSON.parse(clean);
+                            let data;  try {     data = JSON.parse(clean); } catch {     data = clean; }
 
                             urlInputClear.value = "";
 
